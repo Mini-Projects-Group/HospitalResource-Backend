@@ -19,13 +19,13 @@ connection.connect(function (err) {
     if (error) throw error;
     console.log("Table created");
   });
-  
+
   console.log("Connected to db");
 });
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World! 2");
 });
 
 
