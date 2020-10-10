@@ -19,7 +19,7 @@ const app = express();
 app.get("/", (req, res) => {
   //res.send("Hello World!");
 
-  const sql = "create table test(id int) ";
+  const sql = "CREATE TABLE IF NOT EXISTS test(id int) ";
 
   connection.query(sql, (error, result) => {
     if (error) throw error;
@@ -30,6 +30,6 @@ app.get("/", (req, res) => {
   //   console.log("Executed");
 });
 
-connection.end();
+
 
 app.listen(port, () => console.log(`App listening on port ${port}...`));
