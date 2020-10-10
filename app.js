@@ -33,7 +33,7 @@ connection.connect(function (err) {
 const app = express();
 app.use(cors());
 app.use(passport.initialize());
-app.use(passport.session());
+
 
 app.use( '/api/auth', authRoute);
 
