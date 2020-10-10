@@ -12,12 +12,6 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
   if (err) throw err;
-  console.log("Connected to db");
-});
-const app = express();
-
-app.get("/", (req, res) => {
-  //res.send("Hello World!");
 
   const sql = "CREATE TABLE IF NOT EXISTS test(id int) ";
 
@@ -25,9 +19,13 @@ app.get("/", (req, res) => {
     if (error) throw error;
     console.log("Table created");
   });
+  
+  console.log("Connected to db");
+});
+const app = express();
 
-  //   connection.query("create table test(id int) ");
-  //   console.log("Executed");
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 
