@@ -30,21 +30,13 @@ router.post('/signup', async (req,res) => {
         let type  = req.body.type;
         connection.query(insertQuery,async (err , result) => {
             if(err) {
-                console.log(err)
                 return res.json({"message" : "Duplicate Email","error" : true})
             }
             let id = result.insertId;
             if(type == "hospital") {
-                connection.query("SELECT * FROM " + type + " WHERE hospital_id='" + id + "';",(err,row,fields) => {
-                    let token = jwt.sign(JSON.stringify(row[0]),process.env.JWT_SECRET);
-                    return res.json({"message" : "Signed Up Hospital","error" : null,"token":token})
-                });
+                return res.json({"message" : "Seller Signed Up Successfully","error" : false})
             } else {
-                // connection.query();
-                connection.query("SELECT * FROM " + type + " WHERE seller_id='" + id + "';",(err,row,fields) => {
-                    let token = jwt.sign(JSON.stringify(row[0]),process.env.JWT_SECRET);
-                    return res.json({"message" : "Signed Up Seller","error" : null,"token":token})
-                });
+                return res.json({"message" : "Seller Signed Up Successfully","error" : false})
             }
         });
     } catch(e) {
