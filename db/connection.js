@@ -23,7 +23,13 @@ const connection = mysql.createConnection({
       if(error) throw error;
       console.log("Seller User Table Created");
     });
-  
+    // ITEM
+    const item_sql = " CREATE TABLE IF NOT EXISTS item( item_id INT NOT NULL AUTO_INCREMENT, seller_id INT NOT NULL, item_name VARCHAR(255), quantity INT, unit_price FLOAT, PRIMARY KEY(item_id), FOREIGN KEY (seller_id) REFERENCES seller(seller_id) ON DELETE CASCADE ON UPDATE CASCADE );";
+    connection.query(item_sql,(error,result)=>{
+      if(error) throw error;
+      console.log("Item Table created");
+    })
+
     console.log("Connected to db");
   });
 

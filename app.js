@@ -12,6 +12,7 @@ const connection = require('./db/connection');
 
 // ROUTES
 const authRoute = require('./routes/auth');
+const itemRoute = require("./routes/items");
 const passport = require("passport");
 
 
@@ -23,6 +24,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.use('/api/auth', authRoute);
+app.use("/api/item", itemRoute);
 
 app.get("/", (req, res) => {
   res.send("API for DBMS");
