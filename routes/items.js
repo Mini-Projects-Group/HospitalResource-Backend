@@ -9,6 +9,7 @@ const verifyItemSeller = require("../verify/verifyItemSeller");
 
 const query = util.promisify(connection.query).bind(connection);
 
+//GET ALL ITEMS
 router.get(
   "/allitems/:sellerId",
   passport.authenticate("jwt", { session: false }),
@@ -84,6 +85,40 @@ router.delete(
           res
             .status(200)
             .json({ message: "Item Deleted Successfully", error: false });
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ message: "Error", error: true });
+    }
+  }
+);
+
+//MODIFY ITEM QUANTITY
+router.post(
+  "/modify",
+  passport.authenticate("jwt", { session: false }),
+  verifySeller,
+  verifyItemSeller,
+  async (req, res) => {
+    try {
+      let updateQuery =
+        "UPDATE item SET quantity = quantity + " +
+        req.body.addQuantity +
+        " WHERE item_id= " +
+        req.body.item_id +
+        ";";
+
+      connection.query(updateQuery, async (err, result) => {
+        if (err)
+          res.status(400).json({
+            message: "Error in Modifying Quantity of Item",
+            error: true,
+          });
+        else
+          res.status(200).json({
+            message: "Item Quantity Modified Successfully",
+            error: false,
+          });
       });
     } catch (error) {
       console.log(error);
