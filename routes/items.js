@@ -75,7 +75,7 @@ router.delete(
   async (req, res) => {
     try {
       let deleteQuery =
-        "DELETE FROM item WHERE item_id =" + req.body.item_id + ";";
+        "DELETE FROM item WHERE item_id =" + req.params.item_id + ";";
       connection.query(deleteQuery, async (err, result) => {
         if (err)
           res
