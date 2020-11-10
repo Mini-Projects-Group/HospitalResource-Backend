@@ -44,6 +44,16 @@ connection.connect(function (err) {
     console.log("Orders table created");
   });
 
+
+  // HOSPITAL STOCK
+  const hospital_stock_sql = 
+    "CREATE TABLE IF NOT EXISTS hospital_stock(hospital_id INT NOT NULL, items JSON ,FOREIGN KEY(hospital_id) REFERENCES hospital(hospital_id) ON DELETE CASCADE ON UPDATE CASCADE)";
+
+  connection.query(hospital_stock_sql, (error, result) => {
+    if( error ) throw error;
+    console.log('Hospital Stock Table created.');
+  });
+
   console.log("Connected to db");
 });
 

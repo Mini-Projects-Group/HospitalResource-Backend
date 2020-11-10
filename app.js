@@ -14,6 +14,8 @@ const connection = require("./db/connection");
 const authRoute = require("./routes/auth");
 const itemRoute = require("./routes/items");
 const orderRoute = require("./routes/orders");
+const hospital_stock = require('./routes/hospital_stock');
+
 const passport = require("passport");
 
 const app = express();
@@ -24,6 +26,7 @@ app.use(passport.initialize());
 app.use("/api/auth", authRoute);
 app.use("/api/item", itemRoute);
 app.use("/api/orders", orderRoute);
+app.use("/api/stock",hospital_stock);
 
 app.get("/", (req, res) => {
   res.send("API for DBMS");

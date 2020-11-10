@@ -13,15 +13,15 @@ router.post(
   "/add",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const { hospital_id, seller_id, items } = req.body;
-
+    const { seller_id,hospital_id, items } = req.body;
+    console.log(req.user);
     const status = "pending"; // status will be pending by default
 
     let insertQuery =
       "INSERT INTO orders VALUES(NULL," +
-      seller_id +
+      req.body.seller_id +
       "," +
-      req.user._id +
+      req.user.hospital_id +
       ", '" +
       JSON.stringify(items) + // array of items
       "' , '" +
@@ -32,6 +32,7 @@ router.post(
     try {
       connection.query(insertQuery, async (error, result) => {
         if (error) {
+          console.log(error);
           res
             .status(400)
             .json({ message: "Error in placing error", error: true });

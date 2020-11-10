@@ -30,11 +30,17 @@ router.post('/signup', async (req,res) => {
         let type  = req.body.type;
         connection.query(insertQuery,async (err , result) => {
             if(err) {
+                console.log(err)
                 return res.json({"message" : "Duplicate Email","error" : true})
             }
             let id = result.insertId;
             if(type == "hospital") {
-                return res.json({"message" : "Seller Signed Up Successfully","error" : false})
+                // CREATE THE HOSPITAL STOCK HER ONLY    
+
+                let createHospitalStock = `INSERT INTO hospital_stock VALUES(${id},${JSON.stringify('[]')});`;
+                let result = await query(createHospitalStock);
+
+                return res.json({"message" : "Hospital Signed Up Successfully","error" : false})
             } else {
                 return res.json({"message" : "Seller Signed Up Successfully","error" : false})
             }
