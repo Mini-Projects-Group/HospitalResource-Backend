@@ -37,7 +37,7 @@ router.post('/signup', async (req,res) => {
             if(type == "hospital") {
                 // CREATE THE HOSPITAL STOCK HER ONLY    
 
-                let createHospitalStock = `INSERT INTO hospital_stock VALUES(${id},${JSON.stringify('[]')});`;
+                let createHospitalStock = `INSERT INTO hospital_stock VALUES(${id},${JSON.stringify('[]')},${JSON.stringify('[]')});`;
                 let result = await query(createHospitalStock);
 
                 return res.json({"message" : "Hospital Signed Up Successfully","error" : false})
