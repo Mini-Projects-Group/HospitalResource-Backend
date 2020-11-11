@@ -13,7 +13,7 @@ router.post(
   "/add",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const { seller_id,hospital_id, items } = req.body;
+    const { seller_id, hospital_id, items } = req.body;
     console.log(req.user);
     const status = "pending"; // status will be pending by default
 
@@ -21,7 +21,7 @@ router.post(
       "INSERT INTO orders VALUES(NULL," +
       req.body.seller_id +
       "," +
-      req.user.hospital_id +
+      hospital_id +
       ", '" +
       JSON.stringify(items) + // array of items
       "' , '" +
