@@ -68,14 +68,14 @@ router.post(
 
 //DELETE ITEM
 router.delete(
-  "/delete",
+  "/delete/:item_id",
   passport.authenticate("jwt", { session: false }),
   verifySeller,
   verifyItemSeller,
   async (req, res) => {
     try {
       let deleteQuery =
-        "DELETE FROM item WHERE item_id =" + req.params.item_id + ";";
+        "DELETE FROM item WHERE item_id =" + parseInt(req.params.item_id) + ";";
       connection.query(deleteQuery, async (err, result) => {
         if (err)
           res
