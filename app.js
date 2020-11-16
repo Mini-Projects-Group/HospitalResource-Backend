@@ -14,7 +14,8 @@ const connection = require("./db/connection");
 const authRoute = require("./routes/auth");
 const itemRoute = require("./routes/items");
 const orderRoute = require("./routes/orders");
-const hospital_stockRoute = require('./routes/hospital_stock');
+const hospital_stockRoute = require("./routes/hospital_stock");
+const sellerRoute = require("./routes/seller");
 
 const passport = require("passport");
 
@@ -26,7 +27,8 @@ app.use(passport.initialize());
 app.use("/api/auth", authRoute);
 app.use("/api/item", itemRoute);
 app.use("/api/orders", orderRoute);
-app.use("/api/stock",hospital_stockRoute);
+app.use("/api/stock", hospital_stockRoute);
+app.use("/api/seller", sellerRoute);
 
 app.get("/", (req, res) => {
   res.send("API for DBMS");
