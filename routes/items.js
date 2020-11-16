@@ -13,7 +13,6 @@ const query = util.promisify(connection.query).bind(connection);
 router.get(
   "/allitems/:sellerId",
   passport.authenticate("jwt", { session: false }),
-  verifySeller,
   async (req, res) => {
     let findQuery =
       "SELECT * FROM item WHERE seller_id = " + req.params.sellerId + ";";
