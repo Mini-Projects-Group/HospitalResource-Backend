@@ -4,6 +4,7 @@ const connection = require("../db/connection");
 const util = require("util");
 const verifySellerApprovingOrder = require("../verify/verifySellerApprovingOrder");
 const query = require("../shared/queryPromise");
+const verifySeller = require("../verify/verifySeller");
 
 const router = express.Router();
 
@@ -64,6 +65,26 @@ router.delete(
         error: false,
         message: "Deleted",
       });
+    } catch (e) {
+      return res.json({
+        error: true,
+        message: "Error Occured",
+      });
+    }
+  }
+);
+
+// Special Route for Seller to get Orders Related to him
+
+router.get(
+  "/allOrders",
+  passport.authenticate("jwt", { session: false }),
+  verifySeller,
+  async (req, res) => {
+    try {
+      let order_seller_query = `SELECT * FROM orders WHERE seller_id = ${req.user.seller_id};`;
+      let result = await query(order_seller_query);
+      res.send(result);
     } catch (e) {
       return res.json({
         error: true,

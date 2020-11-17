@@ -94,7 +94,7 @@ router.delete(
 
 //MODIFY ITEM QUANTITY
 router.post(
-  "/modify",
+  "/modify/:item_id",
   passport.authenticate("jwt", { session: false }),
   verifySeller,
   verifyItemSeller,
@@ -104,7 +104,7 @@ router.post(
         "UPDATE item SET quantity = quantity + " +
         req.body.addQuantity +
         " WHERE item_id= " +
-        req.body.item_id +
+        req.params.item_id +
         ";";
 
       connection.query(updateQuery, async (err, result) => {
