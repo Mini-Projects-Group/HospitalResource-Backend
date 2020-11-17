@@ -82,7 +82,6 @@ router.get('/',
     async(req, res) => {
         try {
             let hospital_id = req.user.hospital_id;
-            console.log(hospital_id);
 
             // GET THE STOCK AND ORDERS OF HOSPITAL LOGGED IN
             let hospital_orders_query =
@@ -96,6 +95,7 @@ router.get('/',
             let stockPercentage = [];
 
             let items = JSON.parse(stock[0].items);
+
             let total = 0;
             for (i = 0; i < items.length; i++) {
                 total += items[i].quantity;
@@ -120,10 +120,12 @@ router.get('/',
                 });
             }
 
+
             return res.json({
                 error: false,
                 message: 'Hospital Info Delivered',
                 orders: orders,
+                stock_items: items,
                 stock: stockPercentage,
                 stock_used: stockPercentage_used
             });
@@ -152,6 +154,8 @@ router.get('/',
 //         }
 //     ]
 // }
+
+// FOR WHEN HOSPITAL DECIDES TO USE A ITEM AND THEY UPDATE THEIR STOCK
 router.post('/used',
     passport.authenticate('jwt', { session: false }),
     verifyHospital,
@@ -207,6 +211,7 @@ router.post('/used',
             });
         }
     });
+
 
 
 module.exports = router;
