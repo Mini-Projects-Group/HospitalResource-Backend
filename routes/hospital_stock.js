@@ -15,6 +15,7 @@ router.get('/approve/:order_id',
         let order_id = req.params.order_id;
 
         let current_order = await query(`SELECT * FROM orders WHERE order_id=${order_id} AND seller_id=${user_id};`);
+
         let hospital_stock = await query(`SELECT * FROM hospital_stock WHERE hospital_id=${current_order[0].hospital_id};`);
         let seller_list = await query(`SELECT * FROM item WHERE seller_id=${user_id};`)
 
@@ -29,7 +30,6 @@ router.get('/approve/:order_id',
             for (j = 0; j < seller_list.length; j++) {
                 if (seller_list[j].item_name.replace(/\s/g, '') == item_list[i].item.replace(/\s/g, '') &&
                     seller_list[j].quantity >= item_list[i].quantity) {
-                    // console.log(i,j,item_list[i],seller_list[j]);
                     flag = true;
                 }
             }
@@ -54,7 +54,7 @@ router.get('/approve/:order_id',
                     hospital_items_list[j].quantity += item_list[i].quantity;
                 }
             }
-            if (flag == false) hospital_items_list.push({ item: item_list[i].item, quantity: item_list[i].quantity });
+            if (flag == false) hospital_items_list.push({ item_id: item_list[i].item_id, item: item_list[i].item, quantity: item_list[i].quantity });
         }
 
         let updated_hospital_stock =
@@ -102,6 +102,7 @@ router.get('/',
             }
             for (i = 0; i < items.length; i++) {
                 stockPercentage.push({
+                    'item_id': items[i].item_id,
                     'item_name': items[i].item,
                     'percent': parseFloat((items[i].quantity / total) * 100).toFixed(2)
                 });
@@ -115,11 +116,11 @@ router.get('/',
             }
             for (i = 0; i < items_used.length; i++) {
                 stockPercentage_used.push({
+                    'item_id': items_used[i].item_id,
                     'item_name': items_used[i].item,
                     'percent': parseFloat((items_used[i].quantity / total) * 100).toFixed(2)
                 });
             }
-
 
             return res.json({
                 error: false,
@@ -146,9 +147,11 @@ router.get('/',
 // {
 //     "items": [
 //         {
+//              "item_id":6
 //             "item": "item 1",
 //             "quantity": 10
 //         },{
+//             "item_id":6
 //             "item": "item 2",
 //             "quantity": 4
 //         }
@@ -169,7 +172,6 @@ router.post('/used',
             let stock_used_items = JSON.parse(stock[0].items_used);
 
             for (i = 0; i < items.length; i++) {
-
                 // UPDATE THE LIST STOCK_ITEMS
                 for (j = 0; j < stock_items.length; j++) {
                     if (items[i].item.replace(/\s/g, '') == stock_items[j].item.replace(/\s/g, '')) {
