@@ -28,7 +28,7 @@ router.get('/approve/:order_id',
         for (i = 0; i < item_list.length; i++) {
             let flag = false;
             for (j = 0; j < seller_list.length; j++) {
-                if (seller_list[j].item_name.replace(/\s/g, '') == item_list[i].item.replace(/\s/g, '') &&
+                if (seller_list[j].item_id == item_list[i].item_id &&
                     seller_list[j].quantity >= item_list[i].quantity) {
                     flag = true;
                 }
@@ -41,7 +41,7 @@ router.get('/approve/:order_id',
             // UPDATE THE SELLER TABLE
             for (i = 0; i < item_list.length; i++) {
                 let updateQuery =
-                    "UPDATE item SET quantity=quantity-" + item_list[i].quantity + " WHERE seller_id=" + user_id + " AND item_name='" + item_list[i].item + "';";
+                    "UPDATE item SET quantity=quantity-" + item_list[i].quantity + " WHERE seller_id=" + user_id + " AND item_name='" + item_list[i].item_name + "';";
                 let result = query(updateQuery);
             }
         }
@@ -49,12 +49,12 @@ router.get('/approve/:order_id',
         for (i = 0; i < item_list.length; i++) {
             let flag = false;
             for (j = 0; j < hospital_items_list.length; j++) {
-                if (hospital_items_list[j].item.replace(/\s/g, '') == item_list[i].item.replace(/\s/g, '')) {
+                if (hospital_items_list[j].item_id == item_list[i].item_id) {
                     flag = true;
                     hospital_items_list[j].quantity += item_list[i].quantity;
                 }
             }
-            if (flag == false) hospital_items_list.push({ item_id: item_list[i].item_id, item: item_list[i].item, quantity: item_list[i].quantity });
+            if (flag == false) hospital_items_list.push({ item_id: item_list[i].item_id, item_name: item_list[i].item_name, quantity: item_list[i].quantity });
         }
 
         let updated_hospital_stock =
@@ -103,7 +103,7 @@ router.get('/',
             for (i = 0; i < items.length; i++) {
                 stockPercentage.push({
                     'item_id': items[i].item_id,
-                    'item_name': items[i].item,
+                    'item_name': items[i].item_name,
                     'percent': parseFloat((items[i].quantity / total) * 100).toFixed(2)
                 });
             }
@@ -117,7 +117,7 @@ router.get('/',
             for (i = 0; i < items_used.length; i++) {
                 stockPercentage_used.push({
                     'item_id': items_used[i].item_id,
-                    'item_name': items_used[i].item,
+                    'item_name': items_used[i].item_name,
                     'percent': parseFloat((items_used[i].quantity / total) * 100).toFixed(2)
                 });
             }
@@ -148,11 +148,11 @@ router.get('/',
 //     "items": [
 //         {
 //              "item_id":6
-//             "item": "item 1",
+//             "item_name": "item 1",
 //             "quantity": 10
 //         },{
 //             "item_id":6
-//             "item": "item 2",
+//             "item_name": "item 2",
 //             "quantity": 4
 //         }
 //     ]
@@ -164,7 +164,7 @@ router.post('/used',
     verifyHospital,
     async(req, res) => {
         try {
-            // req.body.items is array of json object {item: value,quantity: value}
+            // req.body.items is array of json object {item_id: id, item_name: value,quantity: value}
             let items = req.body.items;
 
             let stock = await query(`SELECT * FROM hospital_stock WHERE hospital_id=${req.user.hospital_id};`);
@@ -174,9 +174,9 @@ router.post('/used',
             for (i = 0; i < items.length; i++) {
                 // UPDATE THE LIST STOCK_ITEMS
                 for (j = 0; j < stock_items.length; j++) {
-                    if (items[i].item.replace(/\s/g, '') == stock_items[j].item.replace(/\s/g, '')) {
+                    if (items[i].item_id == stock_items[j].item_id) {
                         if (items[i].quantity > stock_items[j].quantity) {
-                            return res.json({ error: true, message: `You don't have sufficient ${items[i].item}` });
+                            return res.json({ error: true, message: `You don't have sufficient ${items[i].item_name}` });
                         } else {
                             stock_items[j].quantity -= items[i].quantity;
                             break;
@@ -186,7 +186,7 @@ router.post('/used',
                 let flag = false;
                 // UPDATE THE LIST STOCK_USED_ITEMS
                 for (j = 0; j < stock_used_items.length; j++) {
-                    if (items[i].item.replace(/\s/g, '') == stock_used_items[j].item.replace(/\s/g, '')) {
+                    if (items[i].item_id == stock_used_items[j].item_id) {
                         stock_used_items[j].quantity += items[i].quantity;
                         flag = true;
                         break;

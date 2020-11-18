@@ -5,9 +5,6 @@ const query = require("../shared/queryPromise");
 const verifySellerApprovingOrder = async(req, res, next) => {
     let user_id = req.user.seller_id;
     let order_id = req.params.order_id;
-
-
-
     let result = await query(
         `SELECT * FROM orders WHERE order_id=${order_id} AND seller_id=${user_id};`
     );
