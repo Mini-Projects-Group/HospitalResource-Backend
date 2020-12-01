@@ -27,10 +27,10 @@ router.post(
             hospital_id +
             ", '" +
             JSON.stringify(items) + // array of items
-            "' , '" +
-            status +
-            "', CURDATE() , NULL" + // date of order
+            "' , 2, CURDATE() , NULL" + // date of order
             " );";
+
+            console.log(insertQuery);
 
         try {
             connection.query(insertQuery, async(error, result) => {

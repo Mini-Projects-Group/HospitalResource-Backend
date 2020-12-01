@@ -15,7 +15,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     let findQuery =
-      "SELECT * FROM item WHERE seller_id = " + req.params.sellerId + ";";
+      "SELECT * FROM item NATURAL JOIN itemname WHERE seller_id = " + req.params.sellerId + ";";
     try {
       connection.query(findQuery, async (err, result) => {
         if (err)
@@ -38,16 +38,35 @@ router.post(
   async (req, res) => {
     const { item_name, quantity, unit_price } = req.body;
     let insertQuery;
-    insertQuery =
-      "INSERT INTO item VALUES(DEFAULT," +
-      req.user.seller_id +
-      ",'" +
-      item_name +
-      "'," +
-      quantity +
-      "," +
-      unit_price +
-      ");";
+    let queryString = "SELECT * FROM itemname WHERE item_name='" + item_name + "';";
+    let result = await query(queryString);
+    if(result.length == 0) {
+        insertQuery = "INSERT INTO itemname VALUES(NULL,'" + item_name + "');";
+        result = await query(insertQuery);
+
+        insertQuery =
+        "INSERT INTO item VALUES(DEFAULT," +
+        req.user.seller_id +
+        ",'" +
+        result[0].item_name_id +
+        "'," +
+        quantity +
+        "," +
+        unit_price +
+        ");";
+    } else {
+      insertQuery =
+        "INSERT INTO item VALUES(DEFAULT," +
+        req.user.seller_id +
+        ",'" +
+        result[0].item_name_id +
+        "'," +
+        quantity +
+        "," +
+        unit_price +
+        ");";
+    }
+  
     try {
       connection.query(insertQuery, async (err, result) => {
         if (err)
@@ -106,7 +125,7 @@ router.post(
         " WHERE item_id= " +
         req.params.item_id +
         ";";
-
+        
       connection.query(updateQuery, async (err, result) => {
         if (err)
           res.status(400).json({

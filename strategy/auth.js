@@ -16,9 +16,9 @@ passport.use(
         // DECODE PAYLOAD
         let result;
         if(payload.type == 'hospital') {
-            result = await query("SELECT * FROM hospital WHERE hospital_id=" + payload.hospital_id + ";");
+            result = await query("SELECT * FROM hospital NATURAL JOIN credential WHERE hospital_id=" + payload.hospital_id + ";");
         } else {
-            result = await query("SELECT * FROM seller WHERE seller_id=" + payload.seller_id + ";");
+            result = await query("SELECT * FROM seller NATURAL JOIN credential WHERE seller_id=" + payload.seller_id + ";");
         }
         if(result.length == 0)
             done(null,null);

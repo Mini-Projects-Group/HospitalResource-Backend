@@ -17,7 +17,7 @@ router.get('/approve/:order_id',
         let current_order = await query(`SELECT * FROM orders WHERE order_id=${order_id} AND seller_id=${user_id};`);
 
         let hospital_stock = await query(`SELECT * FROM hospital_stock WHERE hospital_id=${current_order[0].hospital_id};`);
-        let seller_list = await query(`SELECT * FROM item WHERE seller_id=${user_id};`)
+        let seller_list = await query(`SELECT * FROM item NATURAL JOIN itemname WHERE seller_id=${user_id};`)
 
 
         let hospital_items_list = JSON.parse(hospital_stock[0].items);

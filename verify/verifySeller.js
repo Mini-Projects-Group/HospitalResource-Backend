@@ -1,7 +1,7 @@
 const verifySeller = async (req, res, next) => {
-  console.log(req.user);
   try {
-    if (req.user.type === "seller") {
+    console.log(req.user.type_id);
+    if (req.user.type_id === 2) {
       next();
     } else {
       res.status(403).json({ message: "Access Denied", error: true });
