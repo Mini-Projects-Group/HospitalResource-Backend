@@ -4,16 +4,13 @@ const express = require("express");
 let connection;
 
 const handleDisconnect = () => {
-    connection = mysql.createConnection({
-        host: process.env.MYSQL_HOSTNAME,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DATABASE,
-        port: process.env.MYSQL_PORT,
-    });
-
-    connection.connect(function(err) {
-        if (err) throw err;
+  connection = mysql.createConnection({
+    host: process.env.MYSQL_HOSTNAME,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+    port: process.env.MYSQL_PORT,
+  });
 
         //Type table
         const type_sql = "CREATE TABLE IF NOT EXISTS type(type_id INT PRIMARY KEY AUTO_INCREMENT, type VARCHAR(255));";
@@ -71,9 +68,12 @@ const handleDisconnect = () => {
 
         let orders_sql = "CREATE TABLE IF NOT EXISTS orders(order_id INT PRIMARY KEY AUTO_INCREMENT, seller_id INT NOT NULL, hospital_id INT NOT NULL, items JSON ,status_id INT,date_order DATE, date_delivery DATE, FOREIGN KEY (seller_id) REFERENCES seller(seller_id) ON DELETE CASCADE ON UPDATE CASCADE,FOREIGN KEY (hospital_id) REFERENCES hospital(hospital_id) ON DELETE CASCADE ON UPDATE CASCADE,FOREIGN KEY(status_id) REFERENCES status(status_id) ON DELETE CASCADE ON UPDATE CASCADE);";
 
-        connection.query(orders_sql, (error, result) => {
-            if (error) throw error;
+    // ORDERS TABLE
+    const orders_sql =
+      "CREATE TABLE IF NOT EXISTS orders(order_id INT PRIMARY KEY AUTO_INCREMENT, seller_id INT NOT NULL, hospital_id INT NOT NULL, items JSON , status VARCHAR(10) ,date_order DATE, date_delivery DATE, FOREIGN KEY (seller_id) REFERENCES seller(seller_id) ON DELETE CASCADE ON UPDATE CASCADE,FOREIGN KEY (hospital_id) REFERENCES hospital(hospital_id) ON DELETE CASCADE ON UPDATE CASCADE);";
 
+      connection.query(orders_sql, (error, result) => {
+        if (error) throw error;
             console.log("Orders table created");
         console.log("Connected to db");
     });
@@ -83,7 +83,7 @@ const handleDisconnect = () => {
         if (err.code === "PROTOCOL_CONNECTION_LOST" || err.code === "ECONNRESET") handleDisconnect();
         else throw err;
     });
-});
+
 }
 
 handleDisconnect();
