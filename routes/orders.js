@@ -20,34 +20,34 @@ router.post(
     console.log(req.user);
     const status = "pending"; // status will be pending by default
 
-        let insertQuery =
-            "INSERT INTO orders VALUES(NULL," +
-            req.body.seller_id +
-            "," +
-            hospital_id +
-            ", '" +
-            JSON.stringify(items) + // array of items
-            "' , 2, CURDATE() , NULL" + // date of order
-            " );";
+    let insertQuery =
+      "INSERT INTO orders VALUES(NULL," +
+      req.body.seller_id +
+      "," +
+      hospital_id +
+      ", '" +
+      JSON.stringify(items) + // array of items
+      "' , 2, CURDATE() , NULL" + // date of order
+      " );";
 
-            console.log(insertQuery);
+    console.log(insertQuery);
 
-        try {
-            connection.query(insertQuery, async(error, result) => {
-                if (error) {
-                    console.log(error);
-                    res
-                        .status(400)
-                        .json({ message: "Error in placing error", error: true });
-                } else
-                    res
-                    .status(200)
-                    .json({ message: "Order placed successfully!!", error: false });
-            });
-        } catch (error) {
-            return res.status(400).json({ message: "Error", error: true });
-        }
+    try {
+      connection.query(insertQuery, async (error, result) => {
+        if (error) {
+          console.log(error);
+          res
+            .status(400)
+            .json({ message: "Error in placing error", error: true });
+        } else
+          res
+            .status(200)
+            .json({ message: "Order placed successfully!!", error: false });
+      });
+    } catch (error) {
+      return res.status(400).json({ message: "Error", error: true });
     }
+  }
 );
 
 router.delete(
@@ -82,7 +82,7 @@ router.get(
   verifySeller,
   async (req, res) => {
     try {
-      let order_seller_query = `SELECT * FROM orders NATURAL JOIN hospital WHERE seller_id = ${req.user.seller_id};`;
+      let order_seller_query = `SELECT * FROM (hospital NATURAL JOIN orders) NATURAL JOIN status WHERE seller_id = ${req.user.seller_id};`;
       let result = await query(order_seller_query);
       res.send(result);
     } catch (e) {

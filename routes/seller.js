@@ -16,7 +16,7 @@ router.get(
   verifyHospital,
   (req, res) => {
     let query =
-      "SELECT seller_id,email_id, shop_name, seller_name, address FROM seller";
+      "SELECT seller_id,email_id, shop_name, seller_name, address FROM seller NATURAL JOIN credential";
 
     try {
       connection.query(query, async (error, result) => {
