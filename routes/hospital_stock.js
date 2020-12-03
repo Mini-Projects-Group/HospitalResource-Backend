@@ -68,12 +68,18 @@ router.get(
           hospital_items_list[j].quantity += item_list[i].quantity;
         }
       }
-      if (flag == false)
+      if (flag == false) {
+        let ans = await query(
+          "SELECT item_name from itemname NATURAL JOIN item WHERE item_id = " +
+            item_list[i].item_id +
+            ";"
+        );
         hospital_items_list.push({
           item_id: item_list[i].item_id,
-          item_name: item_list[i].item_name,
+          item_name: ans[0].item_name,
           quantity: item_list[i].quantity,
         });
+      }
     }
 
     let updated_hospital_stock = `UPDATE hospital_stock SET items='${JSON.stringify(
@@ -102,7 +108,7 @@ router.get(
       let hospital_id = req.user.hospital_id;
 
       // GET THE STOCK AND ORDERS OF HOSPITAL LOGGED IN
-      let hospital_orders_query = `SELECT * FROM orders WHERE hospital_id=${hospital_id};`;
+      let hospital_orders_query = `SELECT * FROM orders NATURAL JOIN status WHERE hospital_id=${hospital_id};`;
       let hospital_stock_query = `SELECT * FROM hospital NATURAL JOIN hospital_stock WHERE hospital.hospital_id=${hospital_id};`;
 
       let orders = await query(hospital_orders_query);

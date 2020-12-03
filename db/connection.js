@@ -66,17 +66,23 @@ const handleDisconnect = () => {
     console.log("Item Table created");
   });
 
+  // ORDERS TABLE
   let orders_sql =
     "CREATE TABLE IF NOT EXISTS orders(order_id INT PRIMARY KEY AUTO_INCREMENT, seller_id INT NOT NULL, hospital_id INT NOT NULL, items JSON ,status_id INT,date_order DATE, date_delivery DATE, FOREIGN KEY (seller_id) REFERENCES seller(seller_id) ON DELETE CASCADE ON UPDATE CASCADE,FOREIGN KEY (hospital_id) REFERENCES hospital(hospital_id) ON DELETE CASCADE ON UPDATE CASCADE,FOREIGN KEY(status_id) REFERENCES status(status_id) ON DELETE CASCADE ON UPDATE CASCADE);";
-
-  // ORDERS TABLE
-  // const orders_sql =
-  //   "CREATE TABLE IF NOT EXISTS orders(order_id INT PRIMARY KEY AUTO_INCREMENT, seller_id INT NOT NULL, hospital_id INT NOT NULL, items JSON , status VARCHAR(10) ,date_order DATE, date_delivery DATE, FOREIGN KEY (seller_id) REFERENCES seller(seller_id) ON DELETE CASCADE ON UPDATE CASCADE,FOREIGN KEY (hospital_id) REFERENCES hospital(hospital_id) ON DELETE CASCADE ON UPDATE CASCADE);";
 
   connection.query(orders_sql, (error, result) => {
     if (error) throw error;
     console.log("Orders table created");
     console.log("Connected to db");
+  });
+
+  // HOSPITAL STOCK
+  const hospital_stock_sql =
+    "CREATE TABLE IF NOT EXISTS hospital_stock(stock_id INT PRIMARY KEY AUTO_INCREMENT ,hospital_id INT NOT NULL, items JSON, items_used JSON ,FOREIGN KEY(hospital_id) REFERENCES hospital(hospital_id) ON DELETE CASCADE ON UPDATE CASCADE)";
+
+  connection.query(hospital_stock_sql, (error, result) => {
+    if (error) throw error;
+    console.log("Hospital Stock Table created.");
   });
 
   connection.on("error", (err) => {
