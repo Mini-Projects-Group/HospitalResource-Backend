@@ -143,6 +143,7 @@ router.get(
           percent: parseFloat((items_used[i].quantity / total) * 100).toFixed(
             2
           ),
+          quantity: items_used[i].quantity,
         });
       }
 
