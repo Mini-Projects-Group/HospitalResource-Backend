@@ -86,7 +86,7 @@ const handleDisconnect = () => {
   });
 
   connection.on("error", (err) => {
-    console.log("Error");
+    console.log("Error: ", err.code);
     if (err.code === "PROTOCOL_CONNECTION_LOST" || err.code === "ECONNRESET")
       handleDisconnect();
     else throw err;

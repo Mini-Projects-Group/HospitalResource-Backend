@@ -98,7 +98,10 @@ router.post("/signup", async (req, res) => {
 
 // LOGIN USER
 router.post("/login", async (req, res) => {
+  console.log('Hello');
+  try {
   // TYPE
+  console.log(req.body);
   let result;
   if (req.body.type.toLowerCase() == "hospital") {
     result = await query(
@@ -130,6 +133,14 @@ router.post("/login", async (req, res) => {
         token: null,
       });
     }
+  }
+  } catch(e) {
+    console.log(e);
+    return res.json({
+      message: "Internal Server Error",
+      error: true,
+      token: null
+    })
   }
 });
 
