@@ -19,13 +19,28 @@ const handleDisconnect = () => {
     if (error) throw error;
     console.log("Type table created");
     // let insertQuery;
-    // insertQuery ="INSERT INTO type VALUES(1,'hospital'),(2,'seller');";
+    // insertQuery = "INSERT INTO type VALUES(1,'hospital'),(2,'seller');";
     // connection.query(insertQuery, async (err, result) => {
-    //     if (err) {
-    //       console.log(err);
-    //     }
+    //   if (err) {
+    //     console.log(err);
+    //   }
     // });
   });
+
+  // Status table
+  // const status_sql =
+  //   "CREATE TABLE IF NOT EXISTS status(status_id INT PRIMARY KEY AUTO_INCREMENT, status VARCHAR(255));";
+  // connection.query(status_sql, (error, result) => {
+  //   if (error) throw error;
+  //   console.log("Status table created");
+  //   let insertQuery;
+  //   insertQuery = "INSERT INTO status VALUES(1,'pending'),(2,'delivered');";
+  //   connection.query(insertQuery, async (err, result) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  //   });
+  // });
 
   // Credenetial table
   const credentials_sql =
@@ -88,8 +103,8 @@ const handleDisconnect = () => {
   connection.on("error", (err) => {
     console.log("Error: ", err.code);
     if (err.code === "PROTOCOL_CONNECTION_LOST" || err.code === "ECONNRESET")
-      // handleDisconnect();
-      ;
+      handleDisconnect();
+    // handleDisconnect();
     else throw err;
   });
 };
